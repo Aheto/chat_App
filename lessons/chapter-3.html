@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mini OpenStax: Lesson 4 — Short Vowel a in Closed Syllables"/>
+  <title>Mini OpenStax — Lesson 4: Short Vowel a</title>
+  <link rel="stylesheet" href="../css/chat.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 id="chapter-title">Lesson 4: Short Vowel a</h1>
+        <div class="lo-tags" id="lo-tags">LO PH4: Decode closed-syllable CVC/CCVC words with short a (/ă/)</div>
+      </div>
+      <div class="role-badge">Student View</div>
+    </div>
+
+    <nav class="chapter-nav" id="chapter-nav"></nav>
+
+    <main id="main-content" role="main">
+      <!-- WhatsApp Feature Integration -->
+      <div class="whatsapp-hint">
+        💬 <strong>Learn like you chat!</strong> Say it with voice notes, share ideas with your group, and send progress reports—all with the safety and privacy of WhatsApp.
+      </div>
+
+      <div class="section">
+        <h2>🔤 Word List</h2>
+        <p>Short <strong>a</strong> (/ă/) in closed syllables:</p>
+        <div class="word-list" id="word-list"></div>
+      </div>
+
+      <div class="section">
+        <h2>📖 Practice Sentences</h2>
+        <p>Read aloud—or record a <strong>voice note</strong> like on WhatsApp!</p>
+        <div class="sentences" id="sentences"></div>
+      </div>
+
+      <!-- GROUP SECTION -->
+      <div class="section" id="group-section" style="display:none;">
+        <h2>👥 Your Learning Group</h2>
+        <div id="group-display"></div>
+        <button type="button" class="btn" id="join-group-btn">➕ Join or Create Group</button>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="section" id="reflection-prompt" style="display:none;">
+        <h2>💡 Reflect & Apply</h2>
+        <p id="reflection-question">How could you use words like “van,” “gas,” or “yam” in a real message to a friend?</p>
+        <textarea id="reflection-response" placeholder="Write 1–2 sentences... (Share with your group like a WhatsApp message!)" rows="3"></textarea>
+        <div class="button-row">
+          <button type="button" class="btn" id="save-reflection">💾 Save & Share with Group</button>
+          <button type="button" class="btn btn-secondary" id="view-peer-reflections">👀 See Peer Ideas</button>
+          <button type="button" class="btn" id="export-group-data">📤 Export My Insights</button>
+          <button type="button" class="btn btn-secondary" id="import-peer-data">📥 Import Peer Insights</button>
+        </div>
+        <div id="import-area" style="display:none; margin-top:0.5rem;">
+          <textarea id="import-text" placeholder="Paste data received via WhatsApp here..." rows="3"></textarea>
+          <button type="button" class="btn" id="do-import" style="margin-top:0.3rem;">✓ Apply</button>
+        </div>
+        <div id="peer-reflections" style="margin-top:1rem; display:none;"></div>
+      </div>
+
+      <!-- NAME PROMPT -->
+      <div id="student-name-prompt" class="section" style="display:none;">
+        <h2>👤 Your Name</h2>
+        <input type="text" id="student-name" placeholder="Enter your name (e.g., Ama K.)" maxlength="30"/>
+        <div id="name-buttons" style="margin-top:0.5rem;"></div>
+        <div class="whatsapp-hint" style="margin-top:1rem;">
+          🔒 <strong>Your data is private.</strong> Reports are sent only when you choose—securely via WhatsApp.
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="quiz" id="quiz-container" style="display:none;">
+        <h2>📝 Quick Check (20 Questions)</h2>
+        <p>Select the best answer for each question.</p>
+        <form id="quiz-form"></form>
+        <button type="button" class="btn" id="submit-quiz">Check Answers</button>
+      </div>
+
+      <div id="feedback"></div>
+
+      <footer>
+        <a href="../premium.html" style="display:block; margin-bottom:0.5rem;">✨ Unlock Premium Features</a>
+        <a href="#" id="send-analytics" style="color:#6c757d;">📤 Send Anonymous Usage Data via WhatsApp</a>
+        <br>
+        <a href="../index.html">🏠 Back to Dashboard</a>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initNamePrompt } from '../js/chatUI.js';
+    import { initGroupSection, initReflectionUI } from '../js/chatUI.js';
+    import { logEvent, evaluateQuiz, generateQuizReport, shareViaWhatsApp } from '../js/chatLogic.js';
+
+    const currentChapter = 3;
+    const MAX_CHAPTER = 261;
+    window.CHAPTER_CONFIG = {
+      title: "Lesson 4: Short Vowel a",
+      loTags: ["LO PH4: Decode closed-syllable CVC/CCVC words with short a (/ă/)"],
+      contentWords: [
+        "van", "vat", "dab", "dad", "dam", "Dan", "gab", "gag", "gal", "gap", "gas",
+        "jab", "jam", "Jan", "lab", "lad", "lag", "lap", "yam", "yap", "wag", "zap"
+      ],
+      sentences: [
+        "Dad had a bad van.",
+        "Dad had a gas can.",
+        "Jan had a nap.",
+        "Dan had a yam.",
+        "Can Dan gab at Jan?",
+        "Can a cat wag?",
+        "Can a rat yap?",
+        "The lad ran a lap.",
+        "The man at the lab had a vat."
+      ],
+      reflectionPrompt: "How could you use words like “van,” “gas,” or “yam” in a real message to a friend?",
+      assessmentItems: [
+        { id: "1", prompt: "Which word has a short /ă/ sound?", options: [{id:"a",text:"van",is_correct:true},{id:"b",text:"ven",is_correct:false},{id:"c",text:"vin",is_correct:false},{id:"d",text:"von",is_correct:false}] },
+        { id: "2", prompt: "How many letters in 'yam'?", options: [{id:"a",text:"3",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"4",is_correct:false},{id:"d",text:"1",is_correct:false}] },
+        { id: "3", prompt: "Which word means 'to move side to side'?", options: [{id:"a",text:"wag",is_correct:true},{id:"b",text:"wig",is_correct:false},{id:"c",text:"wog",is_correct:false},{id:"d",text:"weg",is_correct:false}] },
+        { id: "4", prompt: "What syllable type is 'gap'?", options: [{id:"a",text:"Closed syllable",is_correct:true},{id:"b",text:"Open syllable",is_correct:false},{id:"c",text:"Magic E",is_correct:false},{id:"d",text:"Vowel team",is_correct:false}] },
+        { id: "5", prompt: "Which sentence is from Lesson 4?", options: [{id:"a",text:"Dad had a bad van.",is_correct:true},{id:"b",text:"She likes apples.",is_correct:false},{id:"c",text:"He flew a kite.",is_correct:false},{id:"d",text:"They played soccer.",is_correct:false}] },
+        { id: "6", prompt: "In 'The lad ran a lap,' how many short-a words?", options: [{id:"a",text:"3",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"1",is_correct:false},{id:"d",text:"0",is_correct:false}] },
+        { id: "7", prompt: "Which word rhymes with 'jam'?", options: [{id:"a",text:"yam",is_correct:true},{id:"b",text:"jim",is_correct:false},{id:"c",text:"jom",is_correct:false},{id:"d",text:"jem",is_correct:false}] },
+        { id: "8", prompt: "Which word might complete: '___ had a gas can.'?", options: [{id:"a",text:"Dad",is_correct:true},{id:"b",text:"Did",is_correct:false},{id:"c",text:"Dod",is_correct:false},{id:"d",text:"Dud",is_correct:false}] },
+        { id: "9", prompt: "How many consonants in 'zap'?", options: [{id:"a",text:"2",is_correct:true},{id:"b",text:"1",is_correct:false},{id:"c",text:"3",is_correct:false},{id:"d",text:"0",is_correct:false}] },
+        { id: "10", prompt: "Which word is a name from the sentences?", options: [{id:"a",text:"Dan",is_correct:true},{id:"b",text:"Jan",is_correct:true},{id:"c",text:"Dad",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "11", prompt: "Which word might complete: 'Can a rat ___?'", options: [{id:"a",text:"yap",is_correct:true},{id:"b",text:"yip",is_correct:false},{id:"c",text:"yop",is_correct:false},{id:"d",text:"yup",is_correct:false}] },
+        { id: "12", prompt: "Which word has the same vowel sound as 'dad'?", options: [{id:"a",text:"bad",is_correct:true},{id:"b",text:"bed",is_correct:false},{id:"c",text:"bid",is_correct:false},{id:"d",text:"bud",is_correct:false}] },
+        { id: "13", prompt: "Which sentence includes the word 'lab'?", options: [{id:"a",text:"The man at the lab had a vat.",is_correct:true},{id:"b",text:"Dad had a bad van.",is_correct:false},{id:"c",text:"Jan had a nap.",is_correct:false},{id:"d",text:"Dan had a yam.",is_correct:false}] },
+        { id: "14", prompt: "How many short-a words in: 'Dan had a yam.'?", options: [{id:"a",text:"2",is_correct:true},{id:"b",text:"1",is_correct:false},{id:"c",text:"3",is_correct:false},{id:"d",text:"0",is_correct:false}] },
+        { id: "15", prompt: "Which word might complete: 'The ___ ran a lap.'?", options: [{id:"a",text:"lad",is_correct:true},{id:"b",text:"led",is_correct:false},{id:"c",text:"lid",is_correct:false},{id:"d",text:"lud",is_correct:false}] },
+        { id: "16", prompt: "What phonics pattern is in 'vat'?", options: [{id:"a",text:"Short a in closed syllable",is_correct:true},{id:"b",text:"Long a",is_correct:false},{id:"c",text:"Magic E",is_correct:false},{id:"d",text:"Consonant blend",is_correct:false}] },
+        { id: "17", prompt: "Which word appears in both the word list and sentences?", options: [{id:"a",text:"van",is_correct:true},{id:"b",text:"gas",is_correct:true},{id:"c",text:"yam",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "18", prompt: "Which word might complete: 'Can Dan ___ at Jan?'", options: [{id:"a",text:"gab",is_correct:true},{id:"b",text:"geb",is_correct:false},{id:"c",text:"gib",is_correct:false},{id:"d",text:"gub",is_correct:false}] },
+        { id: "19", prompt: "The word 'lag' connects to which concept?", options: [{id:"a",text:"Short a in CVC",is_correct:true},{id:"b",text:"Long vowel",is_correct:false},{id:"c",text:"R-controlled",is_correct:false},{id:"d",text:"Silent e",is_correct:false}] },
+        { id: "20", prompt: "What is the vowel sound in 'zap'?", options: [{id:"a",text:"/ă/ (short a)",is_correct:true},{id:"b",text:"/ā/",is_correct:false},{id:"c",text:"/e/",is_correct:false},{id:"d",text:"/o/",is_correct:false}] }
+      ]
+    };
+
+    // === Rendering Functions ===
+    function renderWords() {
+      document.getElementById('word-list').innerHTML =
+        CHAPTER_CONFIG.contentWords.map(w => `<span class="word-item">${w}</span>`).join('');
+    }
+
+    function renderSentences() {
+      document.getElementById('sentences').innerHTML =
+        CHAPTER_CONFIG.sentences.map(s => `<p>${s}</p>`).join('');
+    }
+
+    function renderNavigation() {
+      const nav = document.getElementById('chapter-nav');
+      const buttons = [{ label: "Home", url: "../index.html", active: false }];
+      for (let i = 0; i < 4; i++) {
+        const c = currentChapter + i;
+        if (c > MAX_CHAPTER) break;
+        buttons.push({
+          label: `Lesson ${c + 1}`,
+          url: `chapter-${c}.html`,
+          active: i === 0
+        });
+      }
+      nav.innerHTML = buttons.map(b =>
+        `<a href="${b.url}" class="chapter-btn ${b.active ? 'active' : ''}">${b.label}</a>`
+      ).join('');
+    }
+
+    function renderQuiz() {
+      const form = document.getElementById('quiz-form');
+      window.quizCorrectMap = {};
+      form.innerHTML = CHAPTER_CONFIG.assessmentItems.map(q => {
+        const opts = [...q.options].sort(() => Math.random() - 0.5);
+        const correct = q.options.find(o => o.is_correct);
+        window.quizCorrectMap[q.id] = correct.id;
+        const optHtml = opts.map((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx);
+          return `<div class="option"><label><input type="radio" name="q${q.id}" value="${opt.id}" required> ${letter}. ${opt.text}</label></div>`;
+        }).join('');
+        return `<div class="question"><strong>${q.id}. ${q.prompt}</strong><div class="options">${optHtml}</div></div>`;
+      }).join('');
+    }
+
+    function setupQuizListeners() {
+      document.getElementById('submit-quiz').addEventListener('click', () => {
+        const form = document.getElementById('quiz-form');
+        const answers = [];
+        for (let i = 1; i <= 20; i++) {
+          const el = form.querySelector(`input[name="q${i}"]:checked`);
+          answers.push(el ? el.value : null);
+        }
+        if (answers.includes(null)) {
+          alert("Please answer all questions.");
+          return;
+        }
+
+        const results = evaluateQuiz(answers, window.quizCorrectMap, CHAPTER_CONFIG.assessmentItems);
+        const timeOnTask = Math.floor((Date.now() - window.startTime) / 1000);
+        const attempts = (parseInt(localStorage.getItem(`quiz_attempts_${currentChapter}`)) || 0) + 1;
+        const reflection = localStorage.getItem(`reflection_${currentChapter}`) || '';
+
+        const report = generateQuizReport(currentChapter, results, timeOnTask, attempts, reflection);
+        const masteryMsg = results.mastery
+          ? '🎉 Excellent! You’ve mastered short a!'
+          : results.score >= 10
+            ? 'Good! Review missed items.'
+            : 'Keep practicing. Try the word list again.';
+
+        document.getElementById('feedback').innerHTML = `
+          <div class="feedback">
+            <h3>📊 Results: ${results.score}/20</h3>
+            <p><strong>${masteryMsg}</strong></p>
+            <p><strong>Time:</strong> ${timeOnTask}s | <strong>Attempts:</strong> ${attempts}</p>
+            <button type="button" class="btn" style="background:#25D366;" onclick="shareViaWhatsApp(\`${report.replace(/`/g, '\\`')}\`)">
+              📲 Send Report via WhatsApp
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    // === Initialization ===
+    window.startTime = Date.now();
+
+    function initLesson() {
+      document.getElementById('chapter-title').textContent = CHAPTER_CONFIG.title;
+      document.getElementById('lo-tags').textContent = CHAPTER_CONFIG.loTags[0];
+      renderNavigation();
+      renderWords();
+      renderSentences();
+      renderQuiz();
+      setupQuizListeners();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initNamePrompt(() => {
+        initGroupSection(currentChapter);
+        initReflectionUI(currentChapter);
+      });
+      initLesson();
+
+      document.getElementById('send-analytics')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Send anonymous usage data to help improve Mini OpenStax?\n\nYour data is safe—sent only via WhatsApp, no personal info shared.')) {
+          import('../js/chatLogic.js').then(m => m.sendAnalyticsEvents());
+        }
+      });
+    });
+  </script>
+</body>
+</html>

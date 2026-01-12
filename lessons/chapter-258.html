@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mini OpenStax: Lesson 259 — Advanced ci=/sh/ Pattern"/>
+  <title>Mini OpenStax — Lesson 259: ci=/sh/</title>
+  <link rel="stylesheet" href="../css/chat.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 id="chapter-title">Lesson 259: ci = /sh/</h1>
+        <div class="lo-tags" id="lo-tags">LO ADV259: Decode advanced words with silent letters and ci=/sh/</div>
+      </div>
+      <div class="role-badge">Student View</div>
+    </div>
+
+    <nav class="chapter-nav" id="chapter-nav"></nav>
+
+    <main id="main-content" role="main">
+      <!-- WhatsApp Feature Integration -->
+      <div class="whatsapp-hint">
+        💬 <strong>You're approaching the final lessons! Master advanced patterns like “ci = /sh/” to complete your phonics journey.</strong>
+      </div>
+
+      <div class="section">
+        <h2>🔤 Word List</h2>
+        <p>Advanced words with <strong>ci = /sh/</strong>:</p>
+        <div class="word-list" id="word-list"></div>
+      </div>
+
+      <div class="section">
+        <h2>📖 Practice Sentences</h2>
+        <p>Read aloud—or record a <strong>voice note</strong> like on WhatsApp!</p>
+        <div class="sentences" id="sentences"></div>
+      </div>
+
+      <!-- GROUP SECTION -->
+      <div class="section" id="group-section" style="display:none;">
+        <h2>👥 Your Learning Group</h2>
+        <div id="group-display"></div>
+        <button type="button" class="btn" id="join-group-btn">➕ Join or Create Group</button>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="section" id="reflection-prompt" style="display:none;">
+        <h2>💡 Reflect & Apply</h2>
+        <p id="reflection-question">How might you use words like “delicious,” “special,” or “official” in a real message to a friend?</p>
+        <textarea id="reflection-response" placeholder="Write 1–2 sentences... (Share with your group like a WhatsApp message!)" rows="3"></textarea>
+        <div class="button-row">
+          <button type="button" class="btn" id="save-reflection">💾 Save & Share with Group</button>
+          <button type="button" class="btn btn-secondary" id="view-peer-reflections">👀 See Peer Ideas</button>
+          <button type="button" class="btn" id="export-group-data">📤 Export My Insights</button>
+          <button type="button" class="btn btn-secondary" id="import-peer-data">📥 Import Peer Insights</button>
+        </div>
+        <div id="import-area" style="display:none; margin-top:0.5rem;">
+          <textarea id="import-text" placeholder="Paste data received via WhatsApp here..." rows="3"></textarea>
+          <button type="button" class="btn" id="do-import" style="margin-top:0.3rem;">✓ Apply</button>
+        </div>
+        <div id="peer-reflections" style="margin-top:1rem; display:none;"></div>
+      </div>
+
+      <!-- NAME PROMPT -->
+      <div id="student-name-prompt" class="section" style="display:none;">
+        <h2>👤 Your Name</h2>
+        <input type="text" id="student-name" placeholder="Enter your name (e.g., Ama K.)" maxlength="30"/>
+        <div id="name-buttons" style="margin-top:0.5rem;"></div>
+        <div class="whatsapp-hint" style="margin-top:1rem;">
+          🔒 <strong>Your data is private.</strong> Reports are sent only when you choose—securely via WhatsApp.
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="quiz" id="quiz-container" style="display:none;">
+        <h2>📝 Mastery Check (20 Questions)</h2>
+        <p>Select the best answer for each question.</p>
+        <form id="quiz-form"></form>
+        <button type="button" class="btn" id="submit-quiz">Check Answers</button>
+      </div>
+
+      <div id="feedback"></div>
+
+      <footer>
+        <a href="../premium.html" style="display:block; margin-bottom:0.5rem;">✨ Unlock Premium Features</a>
+        <a href="#" id="send-analytics" style="color:#6c757d;">📤 Send Anonymous Usage Data via WhatsApp</a>
+        <br>
+        <a href="../index.html">🏠 Back to Dashboard</a>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initNamePrompt } from '../js/chatUI.js';
+    import { initGroupSection, initReflectionUI } from '../js/chatUI.js';
+    import { logEvent, evaluateQuiz, generateQuizReport, shareViaWhatsApp } from '../js/chatLogic.js';
+
+    const currentChapter = 258;
+    const MAX_CHAPTER = 262;
+    window.CHAPTER_CONFIG = {
+      title: "Lesson 259: ci = /sh/",
+      loTags: ["LO ADV259: Decode advanced words with silent letters and ci=/sh/"],
+      contentWords: [
+        "special", "social", "facial", "crucial", "official", "artificial", "commercial",
+        "magician", "musician", "physician", "suspicion", "precious", "gracious",
+        "spacious", "vicious", "delicious", "sufficient"
+      ],
+      sentences: [
+        "Gold is a type of precious metal.",
+        "Joseph was a gracious host at the party.",
+        "The musician will play an instrument in the orchestra.",
+        "The government official plans to resign from his post.",
+        "The son gave his mother a compliment on the delicious meal.",
+        "A person should give special attention to a crucial decision.",
+        "A television commercial tries to convince you to buy a product.",
+        "The magician can perform magic tricks to amuse and delight the children."
+      ],
+      reflectionPrompt: "How might you use words like “delicious,” “special,” or “official” in a real message to a friend?",
+      assessmentItems: [
+        { id: "1", prompt: "Which word contains /sh/ spelled 'ci'?", options: [{id:"a",text:"delicious",is_correct:true},{id:"b",text:"decide",is_correct:false},{id:"c",text:"decimal",is_correct:false},{id:"d",text:"declare",is_correct:false}] },
+        { id: "2", prompt: "How many syllables in 'musician'?", options: [{id:"a",text:"3",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"4",is_correct:false},{id:"d",text:"1",is_correct:false}] },
+        { id: "3", prompt: "Which word means 'extremely important'?", options: [{id:"a",text:"crucial",is_correct:true},{id:"b",text:"social",is_correct:false},{id:"c",text:"facial",is_correct:false},{id:"d",text:"artificial",is_correct:false}] },
+        { id: "4", prompt: "What sound does 'ci' make in 'suspicion'?", options: [{id:"a",text:"/sh/",is_correct:true},{id:"b",text:"/s/",is_correct:false},{id:"c",text:"/k/",is_correct:false},{id:"d",text:"/ch/",is_correct:false}] },
+        { id: "5", prompt: "Which sentence is from Lesson 259?", options: [{id:"a",text:"Gold is a type of precious metal.",is_correct:true},{id:"b",text:"She likes apples.",is_correct:false},{id:"c",text:"He flew a kite.",is_correct:false},{id:"d",text:"They played soccer.",is_correct:false}] },
+        { id: "6", prompt: "In 'The son gave his mother a compliment on the delicious meal,' how many ci=/sh/ words?", options: [{id:"a",text:"1",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"0",is_correct:false},{id:"d",text:"3",is_correct:false}] },
+        { id: "7", prompt: "Which word rhymes with 'delicious'?", options: [{id:"a",text:"ambitious",is_correct:true},{id:"b",text:"nutritious",is_correct:true},{id:"c",text:"auspicious",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "8", prompt: "Which word might complete: 'The ___ will play in the orchestra.'?", options: [{id:"a",text:"musician",is_correct:true},{id:"b",text:"magician",is_correct:false},{id:"c",text:"physician",is_correct:false},{id:"d",text:"official",is_correct:false}] },
+        { id: "9", prompt: "How many consonants in 'gracious'?", options: [{id:"a",text:"5",is_correct:true},{id:"b",text:"4",is_correct:false},{id:"c",text:"6",is_correct:false},{id:"d",text:"3",is_correct:false}] },
+        { id: "10", prompt: "Which word is NOT in the Lesson 259 word list?", options: [{id:"a",text:"decision",is_correct:true},{id:"b",text:"suspicion",is_correct:false},{id:"c",text:"sufficient",is_correct:false},{id:"d",text:"spacious",is_correct:false}] },
+        { id: "11", prompt: "Which word might complete: 'Give ___ attention to a crucial decision.'?", options: [{id:"a",text:"special",is_correct:true},{id:"b",text:"social",is_correct:false},{id:"c",text:"facial",is_correct:false},{id:"d",text:"artificial",is_correct:false}] },
+        { id: "12", prompt: "Which word has the same /sh/ sound as 'official'?", options: [{id:"a",text:"ocean",is_correct:false},{id:"b",text:"nation",is_correct:true},{id:"c",text:"mansion",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "13", prompt: "Which sentence includes the word 'magician'?", options: [{id:"a",text:"The magician can perform magic tricks...",is_correct:true},{id:"b",text:"Gold is a precious metal.",is_correct:false},{id:"c",text:"The musician will play...",is_correct:false},{id:"d",text:"The son gave his mother...",is_correct:false}] },
+        { id: "14", prompt: "How many ci=/sh/ words in: 'The government official plans to resign.'?", options: [{id:"a",text:"1",is_correct:true},{id:"b",text:"0",is_correct:false},{id:"c",text:"2",is_correct:false},{id:"d",text:"3",is_correct:false}] },
+        { id: "15", prompt: "Which word might complete: 'This meal is absolutely ___!'?", options: [{id:"a",text:"delicious",is_correct:true},{id:"b",text:"sufficient",is_correct:false},{id:"c",text:"vicious",is_correct:false},{id:"d",text:"artificial",is_correct:false}] },
+        { id: "16", prompt: "What phonics concept is taught in Lesson 259?", options: [{id:"a",text:"ci = /sh/",is_correct:true},{id:"b",text:"silent k",is_correct:false},{id:"c",text:"long vowels",is_correct:false},{id:"d",text:"consonant blends",is_correct:false}] },
+        { id: "17", prompt: "Which word appears in both the word list and sentences?", options: [{id:"a",text:"precious",is_correct:true},{id:"b",text:"delicious",is_correct:true},{id:"c",text:"musician",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "18", prompt: "Which word might complete: 'Joseph was a ___ host.'?", options: [{id:"a",text:"gracious",is_correct:true},{id:"b",text:"spacious",is_correct:false},{id:"c",text:"vicious",is_correct:false},{id:"d",text:"suspicion",is_correct:false}] },
+        { id: "19", prompt: "The word 'physician' connects to which concept?", options: [{id:"a",text:"ci = /sh/",is_correct:true},{id:"b",text:"silent ph",is_correct:false},{id:"c",text:"magic e",is_correct:false},{id:"d",text:"vowel teams",is_correct:false}] },
+        { id: "20", prompt: "Why is 'ci' sometimes pronounced /sh/?", options: [{id:"a",text:"It's a historical spelling pattern in English",is_correct:true},{id:"b",text:"It always makes /k/ sound",is_correct:false},{id:"c",text:"It only happens in science words",is_correct:false},{id:"d",text:"It’s a typo",is_correct:false}] }
+      ]
+    };
+
+    // === Rendering Functions ===
+    function renderWords() {
+      document.getElementById('word-list').innerHTML =
+        CHAPTER_CONFIG.contentWords.map(w => `<span class="word-item">${w}</span>`).join('');
+    }
+
+    function renderSentences() {
+      document.getElementById('sentences').innerHTML =
+        CHAPTER_CONFIG.sentences.map(s => `<p>${s}</p>`).join('');
+    }
+
+    function renderNavigation() {
+      const nav = document.getElementById('chapter-nav');
+      const buttons = [{ label: "Home", url: "../index.html", active: false }];
+      for (let i = 0; i < 4; i++) {
+        const c = currentChapter - 3 + i;
+        if (c < 0 || c >= MAX_CHAPTER) continue;
+        buttons.push({
+          label: `Lesson ${c + 1}`,
+          url: `chapter-${c}.html`,
+          active: c === currentChapter
+        });
+      }
+      nav.innerHTML = buttons.map(b =>
+        `<a href="${b.url}" class="chapter-btn ${b.active ? 'active' : ''}">${b.label}</a>`
+      ).join('');
+    }
+
+    function renderQuiz() {
+      const form = document.getElementById('quiz-form');
+      window.quizCorrectMap = {};
+      form.innerHTML = CHAPTER_CONFIG.assessmentItems.map(q => {
+        const opts = [...q.options].sort(() => Math.random() - 0.5);
+        const correct = q.options.find(o => o.is_correct);
+        window.quizCorrectMap[q.id] = correct.id;
+        const optHtml = opts.map((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx);
+          return `<div class="option"><label><input type="radio" name="q${q.id}" value="${opt.id}" required> ${letter}. ${opt.text}</label></div>`;
+        }).join('');
+        return `<div class="question"><strong>${q.id}. ${q.prompt}</strong><div class="options">${optHtml}</div></div>`;
+      }).join('');
+    }
+
+    function setupQuizListeners() {
+      document.getElementById('submit-quiz').addEventListener('click', () => {
+        const form = document.getElementById('quiz-form');
+        const answers = [];
+        for (let i = 1; i <= 20; i++) {
+          const el = form.querySelector(`input[name="q${i}"]:checked`);
+          answers.push(el ? el.value : null);
+        }
+        if (answers.includes(null)) {
+          alert("Please answer all questions.");
+          return;
+        }
+
+        const results = evaluateQuiz(answers, window.quizCorrectMap, CHAPTER_CONFIG.assessmentItems);
+        const timeOnTask = Math.floor((Date.now() - window.startTime) / 1000);
+        const attempts = (parseInt(localStorage.getItem(`quiz_attempts_${currentChapter}`)) || 0) + 1;
+        const reflection = localStorage.getItem(`reflection_${currentChapter}`) || '';
+
+        const report = generateQuizReport(currentChapter, results, timeOnTask, attempts, reflection);
+        const masteryMsg = results.mastery
+          ? '🎉 Excellent! You’re ready for Lessons 260–262!'
+          : 'Good effort! Review and try again to reach the final lessons.';
+
+        document.getElementById('feedback').innerHTML = `
+          <div class="feedback">
+            <h3>📊 Results: ${results.score}/20</h3>
+            <p><strong>${masteryMsg}</strong></p>
+            <p><strong>Time:</strong> ${timeOnTask}s | <strong>Attempts:</strong> ${attempts}</p>
+            <button type="button" class="btn" style="background:#25D366;" onclick="shareViaWhatsApp(\`${report.replace(/`/g, '\\`')}\`)">
+              📲 Send Report via WhatsApp
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    // === Initialization ===
+    window.startTime = Date.now();
+
+    function initLesson() {
+      document.getElementById('chapter-title').textContent = CHAPTER_CONFIG.title;
+      document.getElementById('lo-tags').textContent = CHAPTER_CONFIG.loTags[0];
+      renderNavigation();
+      renderWords();
+      renderSentences();
+      renderQuiz();
+      setupQuizListeners();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initNamePrompt(() => {
+        initGroupSection(currentChapter);
+        initReflectionUI(currentChapter);
+      });
+      initLesson();
+
+      document.getElementById('send-analytics')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Send anonymous usage data to help improve Mini OpenStax?\n\nYour data is safe—sent only via WhatsApp, no personal info shared.')) {
+          import('../js/chatLogic.js').then(m => m.sendAnalyticsEvents());
+        }
+      });
+    });
+  </script>
+</body>
+</html>

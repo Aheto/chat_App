@@ -3,9 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Mini OpenStax: Learning Dashboard" />
+  <meta name="description" content="Mini OpenStax: Offline Phonics Mastery for Students & Instructors" />
   <title>Mini OpenStax — Dashboard</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#006b3d" />
+
+  <!-- Shared Styles -->
   <link rel="stylesheet" href="css/chat.css" />
+  
   <style>
     .hero {
       text-align: center;
@@ -25,7 +34,7 @@
     }
     .lesson-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1rem;
       margin-top: 1rem;
     }
@@ -45,6 +54,19 @@
       font-weight: bold;
       text-decoration: none;
     }
+    #install-btn {
+      background: var(--gold);
+      color: var(--dark);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-left: 0.5rem;
+      text-decoration: none;
+      display: none;
+    }
+    #install-btn:hover {
+      background: #bfa000;
+    }
   </style>
 </head>
 <body>
@@ -54,41 +76,42 @@
     <div class="header">
       <div>
         <h1>Mini OpenStax</h1>
-        <div class="role-badge" id="role-badge">Student View</div>
+        <div class="role-badge" id="role-badge">Setup Mode</div>
       </div>
       <div id="group-display" style="font-size: 0.9rem; color: var(--green);"></div>
     </div>
 
     <main id="main-content" role="main">
       <div class="hero">
-        <h1>Welcome to Mini OpenStax!</h1>
-        <p>Your journey through phonics mastery starts here.</p>
+        <h1>📚 Mini OpenStax</h1>
+        <p>Master phonics offline—like you chat on WhatsApp.</p>
+        <a href="#" id="install-btn">📲 Install App</a>
       </div>
 
       <!-- Setup Prompt for New Users -->
-      <div id="setup-prompt" class="setup-cta" style="display:none;">
+      <div id="setup-prompt" class="setup-cta">
         <h2>🆕 New Here?</h2>
-        <p>Set your name, role, and learning group in under a minute.</p>
+        <p>Set your name, role, and group in under a minute.</p>
         <a href="setup.html" class="btn">🚀 Get Started</a>
       </div>
 
-      <!-- Group & Lesson Section (for returning users) -->
-      <section id="main-section" style="display:none;">
+      <!-- Main Dashboard (Hidden by default) -->
+      <div id="main-section" style="display:none;">
         <div class="whatsapp-hint">
-          💬 <strong>Group learning, WhatsApp-style!</strong> Share reflections, export insights, and collaborate securely—no cloud required.
+          💬 <strong>Learn like you chat!</strong> Share reflections via WhatsApp, collaborate in groups, and track mastery—all offline.
         </div>
 
-        <section id="group-section" class="section">
+        <section class="section">
           <h2>👥 Your Learning Group</h2>
           <div id="group-status"></div>
           <button type="button" class="btn" id="join-group-btn">➕ Join or Create Group</button>
         </section>
 
         <section class="section">
-          <h2>📚 Continue Learning</h2>
+          <h2>📖 Continue Learning</h2>
           <div class="lesson-grid" id="lesson-list"></div>
         </section>
-      </section>
+      </div>
 
       <footer>
         <a href="premium.html" style="display:block; margin-bottom:0.5rem;">✨ Unlock Premium Features</a>
@@ -104,70 +127,90 @@
     import { sendAnalyticsEvents } from './js/chatLogic.js';
 
     const MAX_CHAPTER = 262;
-    const WHATSAPP_NUMBER = "233257320201";
+    let deferredPrompt;
 
-    // DOM Elements
-    const setupPrompt = document.getElementById('setup-prompt');
-    const mainSection = document.getElementById('main-section');
-    const userNameEl = document.getElementById('user-name');
-    const roleBadgeEl = document.getElementById('role-badge');
-    const groupDisplayEl = document.getElementById('group-display');
-    const groupStatusEl = document.getElementById('group-status');
-    const joinGroupBtn = document.getElementById('join-group-btn');
-    const lessonListEl = document.getElementById('lesson-list');
+    // Handle "Install App" button
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('install-btn').style.display = 'inline-block';
+    });
 
-    // Check if user is new
+    document.getElementById('install-btn').addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User installed the app');
+          }
+          deferredPrompt = null;
+        });
+      }
+    });
+
+    // Check user state
     const savedName = localStorage.getItem('student_name');
     const savedRole = localStorage.getItem('user_role') || 'student';
     const groupId = getGroupId();
 
-    if (!savedName || !groupId) {
-      // Show setup prompt
-      setupPrompt.style.display = 'block';
-      mainSection.style.display = 'none';
-      roleBadgeEl.textContent = 'Setup Mode';
-    } else {
-      // Show main dashboard
+    const setupPrompt = document.getElementById('setup-prompt');
+    const mainSection = document.getElementById('main-section');
+    const roleBadge = document.getElementById('role-badge');
+    const groupDisplay = document.getElementById('group-display');
+    const groupStatus = document.getElementById('group-status');
+    const joinGroupBtn = document.getElementById('join-group-btn');
+    const lessonList = document.getElementById('lesson-list');
+
+    if (savedName && groupId) {
+      // Show dashboard
       setupPrompt.style.display = 'none';
       mainSection.style.display = 'block';
 
-      // Update UI
-      roleBadgeEl.textContent = savedRole === 'instructor' ? 'Instructor View' : 'Student View';
-      groupDisplayEl.textContent = `Group: ${groupId}`;
-      groupStatusEl.innerHTML = `<div class="group-card">You're in group: <strong>${groupId}</strong></div>`;
+      roleBadge.textContent = savedRole === 'instructor' ? 'Instructor View' : 'Student View';
+      groupDisplay.textContent = `Group: ${groupId}`;
+      groupStatus.innerHTML = `<div class="group-card">You're in group: <strong>${groupId}</strong></div>`;
       joinGroupBtn.textContent = "✏️ Change Group";
 
-      // Render last 8 lessons
-      lessonListEl.innerHTML = '';
+      // Load last 8 lessons
+      lessonList.innerHTML = '';
       const start = Math.max(0, MAX_CHAPTER - 8);
       for (let i = start; i < MAX_CHAPTER; i++) {
-        const lessonNum = i + 1;
         const card = document.createElement('div');
         card.className = 'lesson-card';
         card.innerHTML = `
-          <a href="lessons/chapter-${i}.html">Lesson ${lessonNum}</a>
+          <a href="lessons/chapter-${i}.html">Lesson ${i + 1}</a>
           <p>Short vowel practice</p>
         `;
-        lessonListEl.appendChild(card);
+        lessonList.appendChild(card);
       }
+
+      joinGroupBtn.onclick = () => {
+        const name = prompt("Enter your group name (e.g., Class 8B):");
+        if (name?.trim()) {
+          setGroupId(name.trim());
+          location.reload();
+        }
+      };
+    } else {
+      // Keep setup visible
+      roleBadge.textContent = 'Setup Mode';
     }
 
-    // Group change handler
-    joinGroupBtn.onclick = () => {
-      const name = prompt("Enter your group name (e.g., Class 8B):");
-      if (name && name.trim()) {
-        setGroupId(name.trim());
-        location.reload();
-      }
-    };
-
-    // Analytics send
-    document.getElementById('send-analytics').addEventListener('click', (e) => {
+    // Analytics
+    document.getElementById('send-analytics').onclick = (e) => {
       e.preventDefault();
       if (confirm('Send anonymous usage data to help improve Mini OpenStax?\n\nYour data is safe—sent only via WhatsApp, no personal info shared.')) {
         sendAnalyticsEvents();
       }
-    });
+    };
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(err => console.warn('SW registration failed:', err));
+      });
+    }
   </script>
 </body>
 </html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mini OpenStax — Quick Setup" />
+  <title>Mini OpenStax — Setup</title>
+  <style>
+    :root {
+      --green: #006b3d;
+      --gold: #cead00;
+      --light: #f9f9f9;
+      --dark: #2d2d2d;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      color: var(--green);
+      font-size: 1.8rem;
+    }
+    .step {
+      background: var(--light);
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--green);
+    }
+    .step h2 {
+      margin-top: 0;
+      color: var(--green);
+      font-size: 1.25rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin: 0.5rem 0;
+    }
+    label {
+      display: block;
+      margin: 0.5rem 0 0.25rem;
+      font-weight: bold;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    .whatsapp-hint {
+      background: #eef7ff;
+      border-left: 3px solid #25D366;
+      padding: 0.75rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .btn {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: #00502e;
+    }
+    .btn-large {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🚀 Welcome to Mini OpenStax</h1>
+      <p>Let’s get you set up in under 60 seconds.</p>
+    </header>
+
+    <form id="setup-form">
+      <!-- Step 1: Name -->
+      <div class="step">
+        <h2>1. Your Name</h2>
+        <label for="student-name">How should we call you?</label>
+        <input type="text" id="student-name" placeholder="e.g., Ama K." maxlength="30" required />
+      </div>
+
+      <!-- Step 2: Role -->
+      <div class="step">
+        <h2>2. Your Role</h2>
+        <div class="checkbox-group">
+          <input type="radio" id="role-student" name="user-role" value="student" checked />
+          <label for="role-student" style="display:inline; margin:0;">Student</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="radio" id="role-instructor" name="user-role" value="instructor" />
+          <label for="role-instructor" style="display:inline; margin:0;">Instructor</label>
+        </div>
+        <div class="whatsapp-hint">
+          👩‍🏫 Instructors get class tools and auto-enable anonymous analytics to help improve lessons.
+        </div>
+      </div>
+
+      <!-- Step 3: Group -->
+      <div class="step">
+        <h2>3. Learning Group</h2>
+        <label for="group-name">Enter your group name (e.g., Class 8B, Family Literacy)</label>
+        <input type="text" id="group-name" placeholder="Group name" maxlength="40" required />
+        <div class="whatsapp-hint">
+          💬 Groups let you share reflections and insights securely via WhatsApp—no cloud needed.
+        </div>
+      </div>
+
+      <!-- Step 4: Analytics -->
+      <div class="step">
+        <h2>4. Help Improve Mini OpenStax</h2>
+        <div class="checkbox-group">
+          <input type="checkbox" id="analytics-consent" />
+          <label for="analytics-consent" style="display:inline; margin:0;">
+            Yes, send anonymous usage data via WhatsApp to help improve literacy tools.
+          </label>
+        </div>
+        <p style="font-size:0.9rem; margin-top:0.5rem;">
+          🔒 No personal info. Only lesson attempts, quiz scores, and mastery counts. Sent only when you choose.
+        </p>
+      </div>
+
+      <div style="text-align:center; margin: 2rem 0;">
+        <button type="submit" class="btn btn-large">✅ Save & Start Learning</button>
+      </div>
+    </form>
+
+    <footer>
+      <p>
+        <a href="index.html">← Back to Dashboard</a>
+      </p>
+      <p>Built in Ghana 🇬🇭 | Offline-first | Privacy by design</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('setup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('student-name').value.trim();
+      const role = document.querySelector('input[name="user-role"]:checked').value;
+      const group = document.getElementById('group-name').value.trim();
+      const analytics = document.getElementById('analytics-consent').checked || (role === 'instructor');
+
+      if (!name || !group) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem('student_name', name);
+      localStorage.setItem('user_role', role);
+      localStorage.setItem('miniopenstax_group', group);
+      if (analytics) {
+        localStorage.setItem('miniopenstax_analytics_consent', '1');
+      }
+
+      // Success message
+      alert(`✅ Setup complete!\n\nName: ${name}\nRole: ${role}\nGroup: ${group}`);
+      
+      // Redirect based on role
+      if (role === 'instructor') {
+        window.location.href = 'index.html';
+      } else {
+        window.location.href = 'lessons/chapter-0.html';
+      }
+    });
+
+    // Auto-check analytics for instructors
+    document.querySelectorAll('input[name="user-role"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const isInstr = document.getElementById('role-instructor').checked;
+        document.getElementById('analytics-consent').checked = isInstr;
+      });
+    });
+  </script>
+</body>
+</html>

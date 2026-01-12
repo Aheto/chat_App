@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Mini OpenStax — Quick Setup" />
   <title>Mini OpenStax — Setup</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <meta name="theme-color" content="#006b3d" />
+
   <style>
     :root {
       --green: #006b3d;
@@ -58,11 +64,15 @@
       margin: 0.5rem 0 0.25rem;
       font-weight: bold;
     }
-    .checkbox-group {
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      margin: 0.5rem 0;
+    }
+    .radio-option {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin: 0.5rem 0;
     }
     .whatsapp-hint {
       background: #eef7ff;
@@ -124,13 +134,15 @@
       <!-- Step 2: Role -->
       <div class="step">
         <h2>2. Your Role</h2>
-        <div class="checkbox-group">
-          <input type="radio" id="role-student" name="user-role" value="student" checked />
-          <label for="role-student" style="display:inline; margin:0;">Student</label>
-        </div>
-        <div class="checkbox-group">
-          <input type="radio" id="role-instructor" name="user-role" value="instructor" />
-          <label for="role-instructor" style="display:inline; margin:0;">Instructor</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="role-student" name="user-role" value="student" checked />
+            <label for="role-student" style="margin:0;">Student</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="role-instructor" name="user-role" value="instructor" />
+            <label for="role-instructor" style="margin:0;">Instructor</label>
+          </div>
         </div>
         <div class="whatsapp-hint">
           👩‍🏫 Instructors get class tools and auto-enable anonymous analytics to help improve lessons.
@@ -150,9 +162,9 @@
       <!-- Step 4: Analytics -->
       <div class="step">
         <h2>4. Help Improve Mini OpenStax</h2>
-        <div class="checkbox-group">
+        <div class="radio-option">
           <input type="checkbox" id="analytics-consent" />
-          <label for="analytics-consent" style="display:inline; margin:0;">
+          <label for="analytics-consent" style="margin:0;">
             Yes, send anonymous usage data via WhatsApp to help improve literacy tools.
           </label>
         </div>
@@ -175,6 +187,14 @@
   </div>
 
   <script>
+    // Auto-check analytics for instructors
+    document.querySelectorAll('input[name="user-role"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const isInstr = document.getElementById('role-instructor').checked;
+        document.getElementById('analytics-consent').checked = isInstr;
+      });
+    });
+
     document.getElementById('setup-form').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -188,7 +208,7 @@
         return;
       }
 
-      // Save to localStorage
+      // Save to localStorage (mimics your modular keys)
       localStorage.setItem('student_name', name);
       localStorage.setItem('user_role', role);
       localStorage.setItem('miniopenstax_group', group);
@@ -196,7 +216,7 @@
         localStorage.setItem('miniopenstax_analytics_consent', '1');
       }
 
-      // Success message
+      // Success feedback
       alert(`✅ Setup complete!\n\nName: ${name}\nRole: ${role}\nGroup: ${group}`);
       
       // Redirect based on role
@@ -207,13 +227,13 @@
       }
     });
 
-    // Auto-check analytics for instructors
-    document.querySelectorAll('input[name="user-role"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        const isInstr = document.getElementById('role-instructor').checked;
-        document.getElementById('analytics-consent').checked = isInstr;
+    // Register Service Worker (for offline/PWA)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(err => console.warn('SW registration failed:', err));
       });
-    });
+    }
   </script>
 </body>
 </html>

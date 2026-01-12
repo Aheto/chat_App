@@ -1,0 +1,327 @@
+/* chat.css — Shared Styles for Mini OpenStax App */
+:root {
+  --green: #006b3d;   /* Ghana green */
+  --gold: #cead00;    /* Ghana gold */
+  --light: #f9f9f9;
+  --dark: #2d2d2d;
+  --whatsapp-green: #25D366;
+  --border-light: #ddd;
+  --bg-light: #fafafa;
+}
+
+/* Base Reset & Typography */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: var(--dark);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Skip Link (Accessibility) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--green);
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  font-weight: bold;
+}
+.skip-link:focus {
+  top: 6px;
+  outline: 2px solid var(--gold);
+}
+
+/* Layout Container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header & Navigation */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--green);
+}
+
+.role-badge {
+  background: #e9ecef;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chapter-nav {
+  margin: 1.2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.chapter-btn,
+.lesson-card a,
+.btn {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: var(--green);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.chapter-btn.active,
+.chapter-btn:hover,
+.btn:hover {
+  background: #00502e;
+}
+.btn-secondary {
+  background: #6c757d;
+}
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 1.5rem;
+}
+.section h2 {
+  margin-top: 0;
+  color: var(--green);
+  font-size: 1.25rem;
+}
+
+/* Word List */
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.word-item {
+  background: var(--light);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  border: 1px solid #eee;
+}
+
+/* Practice Sentences */
+.sentences p {
+  margin: 0.6rem 0;
+  line-height: 1.6;
+}
+
+/* WhatsApp-Style Hints */
+.whatsapp-hint {
+  background: #eef7ff;
+  border-left: 3px solid var(--whatsapp-green);
+  padding: 0.75rem;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  color: #111;
+}
+.whatsapp-hint strong {
+  color: var(--whatsapp-green);
+}
+
+/* Group & Peer Reflection Styles */
+.group-card {
+  background: #f0f7ff;
+  border-left: 3px solid var(--green);
+  padding: 0.75rem;
+  border-radius: 0 6px 6px 0;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.peer-reflection {
+  background: var(--light);
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin: 0.4rem 0;
+  font-style: italic;
+  position: relative;
+  border: 1px solid #eee;
+}
+.peer-reflection::before {
+  content: "🗨️";
+  position: absolute;
+  left: -1.2rem;
+  top: 0.2rem;
+}
+
+/* Form Controls */
+textarea,
+input[type="text"] {
+  font-family: inherit;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  resize: vertical;
+}
+textarea:focus,
+input[type="text"]:focus {
+  outline: 2px solid var(--gold);
+}
+
+/* Buttons Row */
+.button-row {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Import Area */
+#import-area {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #ccc;
+}
+
+/* Quiz & Feedback */
+.quiz {
+  margin-top: 2rem;
+}
+.question {
+  margin-bottom: 1.2rem;
+}
+.options {
+  margin-left: 1rem;
+}
+.option {
+  margin: 0.4rem 0;
+}
+.option label {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+}
+.option input[type="radio"] {
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.feedback {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--light);
+  border-left: 4px solid var(--green);
+  border-radius: 0 4px 4px 0;
+}
+.feedback h3 {
+  margin-top: 0;
+  color: var(--green);
+}
+
+/* Tables (for contrast tables) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+th {
+  background-color: var(--light);
+  font-weight: 600;
+}
+
+/* Lesson Grid (Dashboard) */
+.lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.lesson-card {
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.lesson-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.lesson-card a {
+  font-weight: bold;
+  color: var(--green);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #666;
+}
+footer a {
+  color: var(--green);
+  text-decoration: none;
+  display: inline-block;
+  margin: 0.25rem 0;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .container {
+    padding: 0.75rem;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  .lesson-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mini OpenStax: Learning Dashboard" />
+  <title>Mini OpenStax — Dashboard</title>
+  <link rel="stylesheet" href="css/chat.css" />
+  <style>
+    :root {
+      --green: #006b3d;
+      --gold: #cead00;
+      --light: #f9f9f9;
+      --dark: #2d2d2d;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: var(--dark);
+    }
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: var(--green);
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+    .skip-link:focus { top: 6px; }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .role-badge {
+      background: #e9ecef;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    .whatsapp-hint {
+      background: #eef7ff;
+      border-left: 3px solid #25D366;
+      padding: 0.75rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    .group-card {
+      background: #f0f7ff;
+      border-left: 3px solid var(--green);
+      padding: 0.75rem;
+      border-radius: 0 6px 6px 0;
+      margin: 0.5rem 0;
+    }
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .lesson-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: box-shadow 0.2s;
+    }
+    .lesson-card:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .lesson-card a {
+      display: block;
+      color: var(--green);
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .btn {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    .btn:hover {
+      background: #00502e;
+    }
+    .btn-secondary {
+      background: #6c757d;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Mini OpenStax</h1>
+        <div class="role-badge" id="role-badge">Student View</div>
+      </div>
+      <div id="group-display" style="font-size: 0.9rem; color: var(--green);"></div>
+    </div>
+
+    <main id="main-content" role="main">
+      <div class="hero">
+        <h1>Welcome, <span id="user-name">learner</span>!</h1>
+        <p>Your journey starts here. Join a group, pick a lesson, and learn like you chat.</p>
+      </div>
+
+      <div class="whatsapp-hint">
+        💬 <strong>Group learning, WhatsApp-style!</strong> Share reflections, export insights, and collaborate securely—no cloud required.
+      </div>
+
+      <!-- Group Setup -->
+      <section id="group-section" class="section">
+        <h2>👥 Your Learning Group</h2>
+        <div id="group-status"></div>
+        <button type="button" class="btn" id="join-group-btn">➕ Join or Create Group</button>
+      </section>
+
+      <!-- Name Prompt (if not set) -->
+      <section id="name-prompt" class="section" style="display:none;">
+        <h2>👤 First, tell us your name</h2>
+        <input type="text" id="student-name" placeholder="e.g., Kwame A." maxlength="30" />
+        <div style="margin-top: 0.5rem;">
+          <button type="button" class="btn" id="save-name">💾 Save & Continue</button>
+          <label style="margin-left: 1rem; font-size: 0.9rem;">
+            <input type="checkbox" id="teacher-mode" /> I'm an instructor
+          </label>
+        </div>
+        <div class="whatsapp-hint" style="margin-top:1rem;">
+          🔒 Your data stays private. Shared only when you choose—via WhatsApp.
+        </div>
+      </section>
+
+      <!-- Lessons Grid -->
+      <section id="lessons-section" class="section" style="display:none;">
+        <h2>📚 Recent Lessons</h2>
+        <div class="lesson-grid" id="lesson-list">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <footer>
+        <a href="premium.html" style="display:block; margin-bottom:0.5rem;">✨ Unlock Premium Features</a>
+        <a href="#" id="send-analytics">📤 Send Anonymous Usage Data via WhatsApp</a>
+        <br />
+        <small>© 2026 Mini OpenStax • Offline-first • Ghana-made</small>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    import { getGroupId, setGroupId } from './js/groupManager.js';
+
+    // Constants
+    const MAX_CHAPTER = 261;
+    const WHATSAPP_NUMBER = "233257320201";
+    const ANALYTICS_KEY = 'miniopenstax_analytics_consent';
+    const EVENTS_KEY = 'miniopenstax_events';
+
+    // DOM Elements
+    const userNameEl = document.getElementById('user-name');
+    const roleBadgeEl = document.getElementById('role-badge');
+    const groupDisplayEl = document.getElementById('group-display');
+    const groupStatusEl = document.getElementById('group-status');
+    const joinGroupBtn = document.getElementById('join-group-btn');
+    const namePromptEl = document.getElementById('name-prompt');
+    const lessonsSectionEl = document.getElementById('lessons-section');
+    const lessonListEl = document.getElementById('lesson-list');
+    const studentNameInput = document.getElementById('student-name');
+    const saveNameBtn = document.getElementById('save-name');
+    const teacherModeCheckbox = document.getElementById('teacher-mode');
+
+    // Utility: Enable analytics
+    function enableAnalytics() {
+      localStorage.setItem(ANALYTICS_KEY, '1');
+    }
+
+    // Utility: Log event (minimal version for dashboard)
+    function logEvent(eventType) {
+      if (localStorage.getItem(ANALYTICS_KEY) !== '1') return;
+      const events = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
+      events.push({ type: eventType, timestamp: Date.now(), lesson: 'dashboard' });
+      localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+    }
+
+    // Render lessons (last 4)
+    function renderLessons() {
+      lessonListEl.innerHTML = '';
+      const start = Math.max(1, MAX_CHAPTER - 3);
+      for (let i = start; i <= MAX_CHAPTER; i++) {
+        const chapterNum = i;
+        const lessonEl = document.createElement('div');
+        lessonEl.className = 'lesson-card';
+        lessonEl.innerHTML = `
+          <a href="lessons/chapter-${chapterNum}.html">Lesson ${chapterNum + 1}</a>
+          <p>Practice & reflect</p>
+        `;
+        lessonListEl.appendChild(lessonEl);
+      }
+    }
+
+    // Initialize group UI
+    function initGroupUI() {
+      const groupId = getGroupId();
+      const userName = localStorage.getItem('student_name') || 'learner';
+      const userRole = localStorage.getItem('user_role') || 'student';
+
+      userNameEl.textContent = userName;
+      roleBadgeEl.textContent = userRole === 'instructor' ? 'Instructor View' : 'Student View';
+
+      if (groupId) {
+        groupDisplayEl.textContent = `Group: ${groupId}`;
+        groupStatusEl.innerHTML = `<div class="group-card">You're in group: <strong>${groupId}</strong></div>`;
+        joinGroupBtn.textContent = "✏️ Change Group";
+        lessonsSectionEl.style.display = 'block';
+        renderLessons();
+      } else {
+        groupDisplayEl.textContent = "";
+        groupStatusEl.innerHTML = '<em>Join a group to begin collaborative learning.</em>';
+        lessonsSectionEl.style.display = 'none';
+      }
+
+      joinGroupBtn.onclick = () => {
+        const name = prompt("Enter your group name (e.g., Class 8B):");
+        if (name && name.trim()) {
+          setGroupId(name.trim());
+          initGroupUI(); // re-render
+        }
+      };
+    }
+
+    // Initialize name prompt
+    function initNamePrompt() {
+      const savedName = localStorage.getItem('student_name');
+      if (savedName) {
+        namePromptEl.style.display = 'none';
+        initGroupUI();
+      } else {
+        namePromptEl.style.display = 'block';
+        lessonsSectionEl.style.display = 'none';
+        saveNameBtn.onclick = () => {
+          const name = studentNameInput.value.trim();
+          if (!name) {
+            alert("Please enter your name.");
+            return;
+          }
+          localStorage.setItem('student_name', name);
+          const isTeacher = teacherModeCheckbox.checked;
+          localStorage.setItem('user_role', isTeacher ? 'instructor' : 'student');
+          if (isTeacher) enableAnalytics();
+          logEvent('dashboard_start');
+          namePromptEl.style.display = 'none';
+          initGroupUI();
+        };
+      }
+    }
+
+    // Analytics send
+    document.getElementById('send-analytics').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Send anonymous usage data to help improve Mini OpenStax?\n\nYour data is safe—sent only via WhatsApp, no personal info shared.')) {
+        const events = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
+        if (events.length === 0) {
+          alert("No usage data to send.");
+          return;
+        }
+        const summary = {
+          lessons_attempted: [...new Set(events.map(e => e.lesson).filter(l => l !== 'dashboard'))].length,
+          events_count: events.length,
+          first_event: new Date(events[0].timestamp).toISOString().split('T')[0],
+          last_event: new Date(events[events.length - 1].timestamp).toISOString().split('T')[0]
+        };
+        const report = `*Mini OpenStax — Anonymous Usage Report*\n` +
+          `Dashboard Visits: ${events.filter(e => e.lesson === 'dashboard').length}\n` +
+          `Lessons Tried: ${summary.lessons_attempted}\n` +
+          `Total Events: ${summary.events_count}\n` +
+          `Period: ${summary.first_event} to ${summary.last_event}`;
+        localStorage.removeItem(EVENTS_KEY);
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(report)}`;
+        window.open(url, '_blank');
+      }
+    });
+
+    // Start
+    document.addEventListener('DOMContentLoaded', () => {
+      initNamePrompt();
+    });
+  </script>
+</body>
+</html>

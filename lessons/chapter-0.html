@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mini OpenStax: Lesson 1 — Introduction to CVC Words"/>
+  <title>Mini OpenStax — Lesson 1: CVC Words & Short Vowels</title>
+  <link rel="stylesheet" href="../css/chat.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 id="chapter-title">Lesson 1: CVC Words & Short Vowels</h1>
+        <div class="lo-tags" id="lo-tags">LO PH1: Identify CVC pattern and short vowel sounds</div>
+      </div>
+      <div class="role-badge">Student View</div>
+    </div>
+
+    <nav class="chapter-nav" id="chapter-nav"></nav>
+
+    <main id="main-content" role="main">
+      <!-- WhatsApp Feature Integration -->
+      <div class="whatsapp-hint">
+        💬 <strong>Learn like you chat!</strong> Say it with voice notes, share ideas with your group, and send progress reports—all with the safety and privacy of WhatsApp.
+      </div>
+
+      <div class="section">
+        <h2>🔤 Word List</h2>
+        <p>Simple CVC words with short vowels:</p>
+        <div class="word-list" id="word-list"></div>
+      </div>
+
+      <div class="section">
+        <h2>📖 Practice Sentences</h2>
+        <p>Read aloud—or record a <strong>voice note</strong> like on WhatsApp!</p>
+        <div class="sentences" id="sentences"></div>
+      </div>
+
+      <!-- GROUP SECTION -->
+      <div class="section" id="group-section" style="display:none;">
+        <h2>👥 Your Learning Group</h2>
+        <div id="group-display"></div>
+        <button type="button" class="btn" id="join-group-btn">➕ Join or Create Group</button>
+      </div>
+
+      <!-- REFLECTION WITH GROUP FEATURES -->
+      <div class="section" id="reflection-prompt" style="display:none;">
+        <h2>💡 Reflect & Apply</h2>
+        <p id="reflection-question">How might you use CVC words in a real conversation—like in a WhatsApp voice note to a friend?</p>
+        <textarea id="reflection-response" placeholder="Write 1–2 sentences... (Share with your group like a WhatsApp message!)" rows="3"></textarea>
+        <div class="button-row">
+          <button type="button" class="btn" id="save-reflection">💾 Save & Share with Group</button>
+          <button type="button" class="btn btn-secondary" id="view-peer-reflections">👀 See Peer Ideas</button>
+          <button type="button" class="btn" id="export-group-data">📤 Export My Insights</button>
+          <button type="button" class="btn btn-secondary" id="import-peer-data">📥 Import Peer Insights</button>
+        </div>
+        <div id="import-area" style="display:none; margin-top:0.5rem;">
+          <textarea id="import-text" placeholder="Paste data received via WhatsApp here..." rows="3"></textarea>
+          <button type="button" class="btn" id="do-import" style="margin-top:0.3rem;">✓ Apply</button>
+        </div>
+        <div id="peer-reflections" style="margin-top:1rem; display:none;"></div>
+      </div>
+
+      <!-- NAME PROMPT -->
+      <div id="student-name-prompt" class="section" style="display:none;">
+        <h2>👤 Your Name</h2>
+        <input type="text" id="student-name" placeholder="Enter your name (e.g., Ama K.)" maxlength="30"/>
+        <div id="name-buttons" style="margin-top:0.5rem;"></div>
+        <div class="whatsapp-hint" style="margin-top:1rem;">
+          🔒 <strong>Your data is private.</strong> Reports are sent only when you choose—securely via WhatsApp.
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="quiz" id="quiz-container" style="display:none;">
+        <h2>📝 Quick Check (20 Questions)</h2>
+        <p>Select the best answer for each question.</p>
+        <form id="quiz-form"></form>
+        <button type="button" class="btn" id="submit-quiz">Check Answers</button>
+      </div>
+
+      <div id="feedback"></div>
+
+      <!-- FOOTER -->
+      <footer>
+        <a href="../premium.html" style="display:block; margin-bottom:0.5rem;">✨ Unlock Premium Features</a>
+        <a href="#" id="send-analytics" style="color:#6c757d;">📤 Send Anonymous Usage Data via WhatsApp</a>
+        <br>
+        <a href="../index.html">🏠 Back to Dashboard</a>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    // === IMPORT MODULAR LOGIC ===
+    import { initNamePrompt } from '../js/chatUI.js';
+    import { initGroupSection, initReflectionUI } from '../js/chatUI.js';
+    import { logEvent, evaluateQuiz, generateQuizReport, shareViaWhatsApp } from '../js/chatLogic.js';
+
+    // === PRESERVE YOUR CONTENT ===
+    const currentChapter = 0;
+    const MAX_CHAPTER = 261;
+    window.CHAPTER_CONFIG = {
+      title: "Lesson 1: CVC Words & Short Vowels",
+      loTags: ["LO PH1: Identify CVC pattern and short vowel sounds"],
+      contentWords: [
+        "cat", "dog", "pen", "cup", "hat", "sun", "bed", "red", "big", "pig",
+        "run", "fun", "man", "pan", "can", "fan", "jam", "ham", "ram", "yam"
+      ],
+      sentences: [
+        "The cat is big.",
+        "I see a red sun.",
+        "Run, dog, run!",
+        "My hat is on the bed.",
+        "Can you jam?",
+        "The man has a pan.",
+        "Fun in the sun!",
+        "Ham and yam are food.",
+        "Big pig in the mud."
+      ],
+      reflectionPrompt: "How might you use CVC words in a real conversation—like in a WhatsApp voice note to a friend?",
+      assessmentItems: [
+        { id: "1", prompt: "Which word follows the CVC pattern?", options: [{id:"a",text:"cat",is_correct:true},{id:"b",text:"see",is_correct:false},{id:"c",text:"go",is_correct:false},{id:"d",text:"my",is_correct:false}] },
+        { id: "2", prompt: "How many letters in a CVC word?", options: [{id:"a",text:"3",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"4",is_correct:false},{id:"d",text:"5",is_correct:false}] },
+        { id: "3", prompt: "What does 'CVC' stand for?", options: [{id:"a",text:"Consonant-Vowel-Consonant",is_correct:true},{id:"b",text:"Vowel-Consonant-Vowel",is_correct:false},{id:"c",text:"Consonant-Consonant-Vowel",is_correct:false},{id:"d",text:"Vowel-Vowel-Consonant",is_correct:false}] },
+        { id: "4", prompt: "Which word is NOT CVC?", options: [{id:"a",text:"dog",is_correct:false},{id:"b",text:"pen",is_correct:false},{id:"c",text:"see",is_correct:true},{id:"d",text:"cup",is_correct:false}] },
+        { id: "5", prompt: "In 'sun', what is the vowel?", options: [{id:"a",text:"u",is_correct:true},{id:"b",text:"s",is_correct:false},{id:"c",text:"n",is_correct:false},{id:"d",text:"none",is_correct:false}] },
+        { id: "6", prompt: "Which sentence uses only CVC words?", options: [{id:"a",text:"The cat is big.",is_correct:true},{id:"b",text:"I love apples.",is_correct:false},{id:"c",text:"She runs fast.",is_correct:false},{id:"d",text:"We play games.",is_correct:false}] },
+        { id: "7", prompt: "What sound does 'a' make in 'cat'?", options: [{id:"a",text:"short a",is_correct:true},{id:"b",text:"long a",is_correct:false},{id:"c",text:"schwa",is_correct:false},{id:"d",text:"silent",is_correct:false}] },
+        { id: "8", prompt: "Which word rhymes with 'bed'?", options: [{id:"a",text:"red",is_correct:true},{id:"b",text:"bad",is_correct:false},{id:"c",text:"bud",is_correct:false},{id:"d",text:"bid",is_correct:false}] },
+        { id: "9", prompt: "How many consonants in 'dog'?", options: [{id:"a",text:"2",is_correct:true},{id:"b",text:"1",is_correct:false},{id:"c",text:"3",is_correct:false},{id:"d",text:"0",is_correct:false}] },
+        { id: "10", prompt: "Which word might complete: 'I have a ___.'?", options: [{id:"a",text:"cup",is_correct:true},{id:"b",text:"cups",is_correct:false},{id:"c",text:"cupping",is_correct:false},{id:"d",text:"cupped",is_correct:false}] },
+        { id: "11", prompt: "What is the first sound in 'pen'?", options: [{id:"a",text:"p",is_correct:true},{id:"b",text:"e",is_correct:false},{id:"c",text:"n",is_correct:false},{id:"d",text:"b",is_correct:false}] },
+        { id: "12", prompt: "Which word has a short vowel?", options: [{id:"a",text:"man",is_correct:true},{id:"b",text:"me",is_correct:false},{id:"c",text:"my",is_correct:false},{id:"d",text:"go",is_correct:false}] },
+        { id: "13", prompt: "Which sentence is from Lesson 1?", options: [{id:"a",text:"Fun in the sun!",is_correct:true},{id:"b",text:"She baked a cake.",is_correct:false},{id:"c",text:"He flew a kite.",is_correct:false},{id:"d",text:"They watched TV.",is_correct:false}] },
+        { id: "14", prompt: "How many CVC words in: 'The man has a pan.'?", options: [{id:"a",text:"3",is_correct:true},{id:"b",text:"2",is_correct:false},{id:"c",text:"1",is_correct:false},{id:"d",text:"4",is_correct:false}] },
+        { id: "15", prompt: "Which word might complete: '___ and yam are food.'?", options: [{id:"a",text:"Ham",is_correct:true},{id:"b",text:"Home",is_correct:false},{id:"c",text:"Him",is_correct:false},{id:"d",text:"Hum",is_correct:false}] },
+        { id: "16", prompt: "What phonics concept is taught in Lesson 1?", options: [{id:"a",text:"CVC pattern with short vowels",is_correct:true},{id:"b",text:"Long vowels",is_correct:false},{id:"c",text:"Silent e",is_correct:false},{id:"d",text:"Blends",is_correct:false}] },
+        { id: "17", prompt: "Which word appears in both the word list and sentences?", options: [{id:"a",text:"cat",is_correct:true},{id:"b",text:"sun",is_correct:true},{id:"c",text:"man",is_correct:true},{id:"d",text:"All of the above",is_correct:true}] },
+        { id: "18", prompt: "Which word might complete: 'Run, ___, run!'?", options: [{id:"a",text:"dog",is_correct:true},{id:"b",text:"dig",is_correct:false},{id:"c",text:"dug",is_correct:false},{id:"d",text:"dag",is_correct:false}] },
+        { id: "19", prompt: "The word 'big' connects to which concept?", options: [{id:"a",text:"Short vowel i in CVC",is_correct:true},{id:"b",text:"Long vowel",is_correct:false},{id:"c",text:"Diphthong",is_correct:false},{id:"d",text:"R-controlled",is_correct:false}] },
+        { id: "20", prompt: "Why is 'see' NOT a CVC word?", options: [{id:"a",text:"It has a long vowel and two vowels",is_correct:true},{id:"b",text:"It has no consonants",is_correct:false},{id:"c",text:"It is too short",is_correct:false},{id:"d",text:"It ends with a vowel",is_correct:false}] }
+      ]
+    };
+
+    // === RENDERING (minimal, using your data) ===
+    function renderWords() {
+      document.getElementById('word-list').innerHTML =
+        CHAPTER_CONFIG.contentWords.map(w => `<span class="word-item">${w}</span>`).join('');
+    }
+
+    function renderSentences() {
+      document.getElementById('sentences').innerHTML =
+        CHAPTER_CONFIG.sentences.map(s => `<p>${s}</p>`).join('');
+    }
+
+    function renderNavigation() {
+      const nav = document.getElementById('chapter-nav');
+      const buttons = [{ label: "Home", url: "../index.html", active: false }];
+      for (let i = 0; i < 4; i++) {
+        const c = currentChapter + i;
+        if (c > MAX_CHAPTER) break;
+        buttons.push({
+          label: `Lesson ${c + 1}`,
+          url: `chapter-${c}.html`,
+          active: i === 0
+        });
+      }
+      nav.innerHTML = buttons.map(b =>
+        `<a href="${b.url}" class="chapter-btn ${b.active ? 'active' : ''}">${b.label}</a>`
+      ).join('');
+    }
+
+    function renderQuiz() {
+      const form = document.getElementById('quiz-form');
+      window.quizCorrectMap = {};
+      const baseSeed = currentChapter * 1000000 + (Date.now() % 1000000);
+
+      form.innerHTML = CHAPTER_CONFIG.assessmentItems.map(q => {
+        const seed = baseSeed + parseInt(q.id, 10);
+        // Simple shuffle (no typo corrections needed)
+        const opts = [...q.options];
+        for (let i = opts.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [opts[i], opts[j]] = [opts[j], opts[i]];
+        }
+        const correct = q.options.find(o => o.is_correct);
+        window.quizCorrectMap[q.id] = correct.id;
+
+        const optHtml = opts.map((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx);
+          return `<div class="option"><label><input type="radio" name="q${q.id}" value="${opt.id}" required> ${letter}. ${opt.text}</label></div>`;
+        }).join('');
+
+        return `<div class="question"><strong>${q.id}. ${q.prompt}</strong><div class="options">${optHtml}</div></div>`;
+      }).join('');
+    }
+
+    function setupQuizListeners() {
+      document.getElementById('submit-quiz').addEventListener('click', () => {
+        const form = document.getElementById('quiz-form');
+        const answers = [];
+        for (let i = 1; i <= 20; i++) {
+          const el = form.querySelector(`input[name="q${i}"]:checked`);
+          answers.push(el ? el.value : null);
+        }
+        if (answers.includes(null)) {
+          alert("Please answer all questions.");
+          return;
+        }
+
+        const results = evaluateQuiz(answers, window.quizCorrectMap, CHAPTER_CONFIG.assessmentItems);
+        const timeOnTask = Math.floor((Date.now() - window.startTime) / 1000);
+        const attempts = (parseInt(localStorage.getItem(`quiz_attempts_${currentChapter}`)) || 0) + 1;
+        const reflection = localStorage.getItem(`reflection_${currentChapter}`) || '';
+
+        const report = generateQuizReport(currentChapter, results, timeOnTask, attempts, reflection);
+        const masteryMsg = results.mastery
+          ? '🎉 Excellent! You’ve mastered CVC words!'
+          : results.score >= 10
+            ? 'Good! Review missed items.'
+            : 'Keep practicing. Try the word list again.';
+
+        document.getElementById('feedback').innerHTML = `
+          <div class="feedback">
+            <h3>📊 Results: ${results.score}/20</h3>
+            <p><strong>${masteryMsg}</strong></p>
+            <p><strong>Time:</strong> ${timeOnTask}s | <strong>Attempts:</strong> ${attempts}</p>
+            <button type="button" class="btn" style="background:#25D366;" onclick="shareViaWhatsApp(\`${report.replace(/`/g, '\\`')}\`)">
+              📲 Send Report via WhatsApp
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    // === INITIALIZATION ===
+    window.startTime = Date.now();
+
+    function initLesson() {
+      document.getElementById('chapter-title').textContent = CHAPTER_CONFIG.title;
+      document.getElementById('lo-tags').textContent = CHAPTER_CONFIG.loTags[0];
+      renderNavigation();
+      renderWords();
+      renderSentences();
+      renderQuiz();
+      setupQuizListeners();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initNamePrompt(() => {
+        initGroupSection(currentChapter);
+        initReflectionUI(currentChapter);
+      });
+      initLesson();
+
+      // Analytics
+      document.getElementById('send-analytics')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Send anonymous usage data to help improve Mini OpenStax?\n\nYour data is safe—sent only via WhatsApp, no personal info shared.')) {
+          import('../js/chatLogic.js').then(m => m.sendAnalyticsEvents());
+        }
+      });
+    });
+  </script>
+</body>
+</html>

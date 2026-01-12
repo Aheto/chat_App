@@ -60,7 +60,7 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
       font-weight: bold;
-      margin-left: 0.5rem;
+      margin-left: 0.75rem;
       text-decoration: none;
       display: none;
     }
@@ -85,17 +85,18 @@
       <div class="hero">
         <h1>📚 Mini OpenStax</h1>
         <p>Master phonics offline—like you chat on WhatsApp.</p>
+        <a href="setup.html" class="btn" style="margin-top: 1rem; display: inline-block;">🆕 New User? Get Started</a>
         <a href="#" id="install-btn">📲 Install App</a>
       </div>
 
-      <!-- Setup Prompt for New Users -->
-      <div id="setup-prompt" class="setup-cta">
-        <h2>🆕 New Here?</h2>
-        <p>Set your name, role, and group in under a minute.</p>
-        <a href="setup.html" class="btn">🚀 Get Started</a>
+      <!-- Setup Prompt for Returning Users -->
+      <div id="setup-prompt" class="setup-cta" style="display:none;">
+        <h2>⚙️ Update Your Settings</h2>
+        <p>Change your name, group, or role.</p>
+        <a href="setup.html" class="btn">Open Setup</a>
       </div>
 
-      <!-- Main Dashboard (Hidden by default) -->
+      <!-- Main Dashboard (for returning users) -->
       <div id="main-section" style="display:none;">
         <div class="whatsapp-hint">
           💬 <strong>Learn like you chat!</strong> Share reflections via WhatsApp, collaborate in groups, and track mastery—all offline.
@@ -129,7 +130,7 @@
     const MAX_CHAPTER = 262;
     let deferredPrompt;
 
-    // Handle "Install App" button
+    // Handle PWA install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -193,6 +194,8 @@
       };
     } else {
       // Keep setup visible
+      setupPrompt.style.display = 'block';
+      mainSection.style.display = 'none';
       roleBadge.textContent = 'Setup Mode';
     }
 
